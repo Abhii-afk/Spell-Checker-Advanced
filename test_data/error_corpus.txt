@@ -1,0 +1,39 @@
+# Error Corpus for Spell Checker Testing
+# Format: misspelled_word -> correct_word
+# This file contains common misspelling patterns for validation
+
+# Transposition errors
+quik -> quick
+form -> from
+unite -> untie
+trial -> trail
+
+# Insertion errors
+algoritm -> algorithm
+performanc -> performance
+implementaion -> implementation
+programing -> programming
+
+# Deletion errors
+efficent -> efficient
+languag -> language
+structur -> structure
+computr -> computer
+
+# Substitution errors
+scince -> science
+recieve -> receive
+seperate -> separate
+definately -> definitely
+
+# Phonetic errors
+nite -> night
+lite -> light
+rite -> right
+thru -> through
+
+# Common typos
+teh -> the
+adn -> and
+hte -> the
+nad -> and

@@ -1,0 +1,30 @@
+The quik brown fox jumps over teh lazy dog.
+This sentance contains several mispelled words for testing.
+Computer scince is a facinating field of study.
+Algoritms and data structurs are fundamental concepts in programing.
+The implementaion of efficent algorithms requires careful consideration.
+Performance optimizaion is crucial for large-scale applications.
+
+John Smith works at NASA on advanced rocket technology.
+McDonald's and iPhone are well-known brand names.
+The FBI and CIA are government agencies.
+Dr. Johnson received his PhD from MIT in 2020.
+
+Numbers like 123, 456.78, and mixed alphanumeric like ABC123 should be handled properly.
+Special characters and punctuation marks: hello@world.com, $100, 50%.
+Contractions like don't, won't, and can't should work correctly.
+
+This paragraph tests proper noun handling at sentence beginnings.
+Apple develops innovative products like the iPhone and iPad.
+Microsoft created Windows and Office software suites.
+Google's search engine revolutionized information retrieval.
+
+Common misspellings include: recieve instead of receive, seperate instead of separate.
+Definately is often misspelled instead of definitely.
+Occassionally people write occassionally instead of occasionally.
+Neccessary is frequently misspelled instead of necessary.
+
+The spell checker should handle various edge cases gracefully.
+Empty lines and short words like a, I, and to should work fine.
+Very long words like antidisestablishmentarianism might be challenging.
+Hyphenated words like well-known and state-of-the-art need special handling.

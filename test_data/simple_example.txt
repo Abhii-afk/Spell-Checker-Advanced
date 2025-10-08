@@ -1,0 +1,3 @@
+Hello wrold! This is a tset file.
+It contians some mispelled words.
+The spel checker should find these erors.
