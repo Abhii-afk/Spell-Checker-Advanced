@@ -1,5 +1,6 @@
 #include "spell_check.h"
 #include "edit_distance.h"
+#include "api_client.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -197,8 +198,26 @@ SpellCheckResult* spell_check_document(TextDocument* doc, Trie* dictionary) {
         
         result->total_words_checked++;
         
-        // Check if word is in dictionary
-        if (!trie_search(dictionary, token->word)) {
+        // Check if word is in local dictionary
+        bool word_found = trie_search(dictionary, token->word);
+        
+        // If not found in local dictionary, try API (if initialized)
+        if (!word_found && is_api_initialized()) {
+            printf("🔍 Checking '%s' via API...\n", token->word);
+            int api_result = fetch_from_api(token->word);
+            
+            if (api_result == 1) {
+                // Word found in API, mark as correct
+                word_found = true;
+                printf("✅ Word '%s' validated by API\n", token->word);
+            } else if (api_result == -1) {
+                // API error, fall back to local checking
+                printf("⚠️  API error for '%s', using local dictionary only\n", token->word);
+            }
+        }
+        
+        // If word still not found, it's misspelled
+        if (!word_found) {
             // Check if it's likely a proper noun (skip if so)
             if (is_likely_proper_noun(token->word, token)) {
                 continue;

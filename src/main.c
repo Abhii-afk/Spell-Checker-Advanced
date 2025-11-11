@@ -5,16 +5,24 @@
 #include "../include/trie.h"
 #include "../include/file_io.h"
 #include "../include/spell_check.h"
+#include "../include/api_client.h"
 
 /**
  * Display usage information
  */
 void print_usage(const char* program_name) {
-    printf("Simple Spell Checker\n");
-    printf("Usage: %s <dictionary_file> <input_file>\n", program_name);
+    printf("Advanced Spell Checker with API Integration\n");
+    printf("Usage: %s [OPTIONS] <dictionary_file> <input_file>\n", program_name);
     printf("\nArguments:\n");
     printf("  dictionary_file  Path to dictionary file (one word per line)\n");
     printf("  input_file       Path to text file to spell check\n");
+    printf("\nOptions:\n");
+    printf("  --api-key KEY    Enable Merriam-Webster API with your API key\n");
+    printf("  --api-stats      Show API statistics after spell checking\n");
+    printf("  -h, --help       Show this help message\n");
+    printf("\nExamples:\n");
+    printf("  %s dict.txt input.txt\n", program_name);
+    printf("  %s --api-key YOUR_KEY dict.txt input.txt\n", program_name);
 }
 
 /**
@@ -78,18 +86,49 @@ void print_results(SpellCheckResult* result) {
  * Main function
  */
 int main(int argc, char* argv[]) {
-    // Check command line arguments
-    if (argc != 3) {
+    // Parse command line arguments
+    const char* api_key = NULL;
+    bool show_api_stats = false;
+    const char* dictionary_file = NULL;
+    const char* input_file = NULL;
+    
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "--api-key") == 0 && i + 1 < argc) {
+            api_key = argv[++i];
+        } else if (strcmp(argv[i], "--api-stats") == 0) {
+            show_api_stats = true;
+        } else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+            print_usage(argv[0]);
+            return 0;
+        } else if (!dictionary_file) {
+            dictionary_file = argv[i];
+        } else if (!input_file) {
+            input_file = argv[i];
+        }
+    }
+    
+    // Validate required arguments
+    if (!dictionary_file || !input_file) {
+        fprintf(stderr, "Error: Missing required arguments\n\n");
         print_usage(argv[0]);
         return 1;
     }
     
-    const char* dictionary_file = argv[1];
-    const char* input_file = argv[2];
-    
-    printf("Simple Spell Checker Starting...\n");
+    printf("🔍 Advanced Spell Checker Starting...\n");
     printf("Dictionary: %s\n", dictionary_file);
     printf("Input file: %s\n", input_file);
+    
+    // Initialize API if key provided
+    if (api_key) {
+        printf("API Key: %s\n", api_key);
+        if (api_client_init(api_key)) {
+            printf("✅ Merriam-Webster API enabled\n");
+        } else {
+            fprintf(stderr, "⚠️  Failed to initialize API, continuing with local dictionary only\n");
+        }
+    } else {
+        printf("ℹ️  API not enabled (use --api-key to enable)\n");
+    }
     printf("\n");
     
     // Create and load dictionary
@@ -129,11 +168,21 @@ int main(int argc, char* argv[]) {
     // Display results
     print_results(result);
     
+    // Show API statistics if requested
+    if (show_api_stats && is_api_initialized()) {
+        print_api_stats();
+    }
+    
     // Cleanup
     free_spell_check_result(result);
     free_text_document(document);
     trie_destroy(dictionary);
     
-    printf("\nSpell check complete!\n");
+    // Cleanup API if initialized
+    if (is_api_initialized()) {
+        api_client_cleanup();
+    }
+    
+    printf("\n✅ Spell check complete!\n");
     return 0;
 }

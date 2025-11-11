@@ -1,0 +1,3 @@
+Hello, World! This is a test.
+Testing tokenization with punctuation: words, more-words.
+Numbers like 123 should be skipped.
